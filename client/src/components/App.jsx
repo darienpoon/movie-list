@@ -14,19 +14,19 @@ import InputField from './InputField.jsx';
 // ];
 
 const App = (props) => {
-  const [input, setInput] = React.useState('');
-  const [relatedSearchList, setRelatedSearchList] = React.useState([]);
-  const [addInput,setAddInput] = React.useState([]);
+  const [searchInput, setSearchInput] = React.useState('');
+  const [filteredList, setFilteredList] = React.useState([]);
+  const [addEntry,setAddEntry] = React.useState([]);
 
 
-  const[watched, setWatched] = React.useState([]);
-  const[toWatch, setToWatch] = React.useState([])
+  const[watchedList, setWatchedList] = React.useState([]);
+  const[toWatchList, setToWatchList] = React.useState([])
 
-  const [displayToWatch, setDisplayToWatch] = React.useState(false);
-  const [displayWatched, setDisplayWatched] = React.useState(false);
+  const [displayingToWatch, setDisplayingToWatch] = React.useState(false);
+  const [displayingWatched, setDisplayingWatched] = React.useState(false);
   const [displayHome, setDisplayHome] = React.useState(false);
 
-  const handleAdd = (e) => {
+  const handleAddEntry = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -34,70 +34,71 @@ const App = (props) => {
     if(formJson.input.length >0) {
       var newMovie = {title:formJson.input, status: 'To Watch' };
       //console.log(newMovie)
-      //console.log(addInput)
-      if (addInput.filter((movie) => movie.title.toLowerCase().includes(newMovie.title.toLowerCase())).length === 0) {
-        setAddInput([...addInput, newMovie]);
+      //console.log(addEntry)
+      if (addEntry.filter((movie) => movie.title.toLowerCase().includes(newMovie.title.toLowerCase())).length === 0) {
+        setAddEntry([...addEntry, newMovie]);
       }
     }
 
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    setInput(formJson.input);
+    setDisplayingToWatch(false);
+    setDisplayingWatched(false);
+    setSearchInput(formJson.input);
   };
 
-  const handleFilter = () => {
-      var filtered = addInput.filter((movie) => movie.title.toLowerCase().includes(input.toLowerCase()));
-      setRelatedSearchList(filtered);
+  const handleFilterFromSearchSubmit = () => {
+      var filtered = addEntry.filter((movie) => movie.title.toLowerCase().includes(searchInput.toLowerCase()));
+      setFilteredList(filtered);
 }
 
 
-
-
-const handleWatchedFilter = () => {
+const handleClickWatchedList = () => {
   setDisplayHome(false);
-  setDisplayToWatch(false);
-  setDisplayWatched(true);
+  setDisplayingToWatch(false);
+  setDisplayingWatched(true);
   //console.log(watched)
 };
 
-const handleToWatchFilter = () => {
+const handleClickToWatchList = () => {
   setDisplayHome(false);
-  setDisplayToWatch(true);
-  setDisplayWatched(false);
+  setDisplayingToWatch(true);
+  setDisplayingWatched(false);
   //console.log(toWatch)
 };
 
-const handleHome = () => {
+const handleClickHomeTitle = () => {
   setDisplayHome(true);
-  setRelatedSearchList([]);
-  setInput('');
+  setDisplayHome(false);
+  setFilteredList([]);
+  setSearchInput('');
 }
 
 useEffect( () => {
-  handleFilter();
-}, [input])
+  handleFilterFromSearchSubmit();
+}, [searchInput])
 
 useEffect( () => {
-  setToWatch([...addInput]);
-}, [addInput])
+  setToWatchList([...addEntry]);
+}, [addEntry])
 
   return (
   <>
-  <div onClick = {handleHome} >MovieList!</div>
+  <div onClick = {handleClickHomeTitle} >MovieList!</div>
   <hr />
-  <div> <InputField addHandler = {handleAdd} /> </div>
+  <div> <InputField addHandler = {handleAddEntry} /> </div>
   <hr />
-   <div> <SearchBar searchHandler = {handleSubmit} /> </div>
+   <div> <SearchBar searchHandler = {handleSearchSubmit} /> </div>
    <hr />
-   <button onClick = {handleWatchedFilter} > My Watched List </button> <button onClick = {handleToWatchFilter} > My To-Watch List </button>
+   <button onClick = {handleClickWatchedList} > My Watched List </button> <button onClick = {handleClickToWatchList} > My To-Watch List </button>
    <hr />
-    <MovieList addInput = {addInput} relatedSearchList = {relatedSearchList} setRelatedSearchList={setRelatedSearchList} input = {input} watched = {watched} toWatch = {toWatch} setWatched = {setWatched} setToWatch = {setToWatch} displayToWatch={displayToWatch} displayWatched={displayWatched} displayHome = {displayHome}
+    <MovieList addEntry = {addEntry} filteredList = {filteredList} setFilteredList={setFilteredList} searchInput = {searchInput} watchedList = {watchedList} toWatchList = {toWatchList} setWatchedList = {setWatchedList} setToWatchList = {setToWatchList} displayingToWatch={displayingToWatch} displayingWatched={displayingWatched} displayHome = {displayHome}
     />
   </>
   );
