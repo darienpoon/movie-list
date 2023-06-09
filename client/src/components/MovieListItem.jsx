@@ -8,14 +8,14 @@ const MovieListItem = ({movie, title, status, addEntry, watchedList, toWatchList
   const viewStatus = isWatched ? "Watched" : "To Watch";
 
   const handleToggleWatchButton = () => {
-    if (isWatched) {
-      setWatchedList(watchedList.filter((m) => m !== movie));
-      setToWatchList([...toWatchList, movie]);
+    if (isWatched) { // if currently watched
+      setWatchedList(watchedList.filter((m) => m !== movie)); // when button clicked, remove movie from watched list
+      setToWatchList([...toWatchList, movie]); // add movie to ToWatch list
       movie.status = 'To Watch'
 
-    } else {
-      setToWatchList(toWatchList.filter((m) => m !== movie));
-      setWatchedList([...watchedList, movie]);
+    } else { // if currently not in watched list
+      setToWatchList(toWatchList.filter((m) => m !== movie)); //button clicked, remove from toWatch list
+      setWatchedList([...watchedList, movie]); //add movie to watched list
       movie.status = 'Watched'
     }
   };

@@ -11,15 +11,7 @@ return (
   </>
 )
 
-
-
-
 }
 
 export default SearchBar;
 
-
-{/* <form onSubmit = {searchHandler}>
-      <input  name="searchMovie" placeholder ="Search..." />
-    <button type="submit">Go!</button>
-    </form> */}
